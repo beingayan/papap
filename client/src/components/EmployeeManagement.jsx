@@ -53,7 +53,7 @@ export default function EmployeeManagement() {
 
   const handleProfileChange = (e) => {
 
-    e.persist();
+    e.persist(); 
     if (e.target.files.length > 0 && e.target.files[0].size <= 512000) {
       if (e.target.files[0]) {
         fileToBase64(e).then(data => {
@@ -172,7 +172,7 @@ export default function EmployeeManagement() {
 
                   <center>
                     <div className="upload-btn-wrapper">
-                      <button className="btn">Upload Profile </button>
+                      <button className="btn" onClick={(e)=>e.preventDefault()}>Upload Profile </button>
                       <input
                         type="file"
                         name="ProPicPath"

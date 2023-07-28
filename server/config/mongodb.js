@@ -1,24 +1,38 @@
-const mongoose = require('mongoose');
-require('dotenv').config()
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const dotenv = require('dotenv').config();
 
-const mongoString = process.env.mongo_key;
+// Replace the placeholder with your Atlas connection string
+const uri = process.env.MONGODB_CLOUD;
 
-const db = ()=>{
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 
-    mongoose.connect(mongoString,{
-        useNewUrlParser:true,
-        // useCreateIndex:true,
-        useUnifiedTopology:true,
-        // useFindAndModify:false
-    }).then(()=>{
-        console.log("connection is successfull");
-    }).catch((err)=>{console.log(err)})
+const client = new MongoClient(uri,  {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+        }
+    }
+);
+
+async function run() {
+    console.log("uri",uri)
+  try {
+    // Connect the client to the server (optional starting in v4.7)
+    await client.connect();
+
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    
+// set timeout to wait untill all process get finsihed
+    setTimeout(async()=>{
+        await client.close();
+    },1000)
+  }
 }
-module.exports={db};
+run().catch(console.dir);
 
-
-
-
-
-
-
+module.exports = run;
